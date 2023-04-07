@@ -1,46 +1,29 @@
-// let firstInput = prompt('Write the First Number you want to add', '');
-// let operator = prompt('Write the Operator', '');
-// let lastInput = prompt('Write the Number', '');
-// let firstNumber = parseInt(firstInput);
-// let lastNumber = parseInt(lastInput);
-
 let numbers = document.querySelectorAll('.numbers');
+let operators = document.querySelectorAll('.operator')
+let typedText = document.querySelector('.typeText');
 let firstNumber = [];
 let lastNumber = [];
-let operator = '';
+let operator;
+let operatorClicked = false;
+let percentageActive = false;
 
-for(i = 0; i < numbers.length;i++){
-    numbers[i].addEventListener('click',(e) => {
+for (i = 0; i < numbers.length; i++) {
+    numbers[i].addEventListener('click', (e) => {
         let displayText = document.createTextNode(e.target.id);
-        document.querySelector('.typeText').appendChild(displayText);
+        typedText.appendChild(displayText);
         firstNumber.push(e.target.id);
-        console.log(firstNumber.join(''));
     })
 }
 
-// function operate(operator,number1,number2){
-//     if (number1) {
-//         let value;
-//         if (operator === '+') {
-//             value = number1 + number2
-//         }
-//         else if (operator === '-') {
-//             value = number1 - number2
-//         }
-//         else if (operator === '*') {
-//             value = number1 * number2
-//         }
-//         else if (operator === '/') {
-//             vaue = number1 / number2
-//         }
-//         console.log(value);
-//     }
-// }
-
-// operate(operator,firstNumber,lastNumber);
+document.querySelector('.reset').addEventListener('click', (e) => {
+    document.querySelector('.typeText').innerHTML = '';
+    firstNumber.length = 0;
+})
 
 
-
-/** 1 2 3 4 5 6 7 8 9 0 .
- *  0 1 2 3 4 5 6 7 8 9 10
- */
+for (i = 0; i < operators.length; i++) {
+    operators[i].addEventListener('click', (e) => {
+        operator = e.target.id;
+        typedText.innerHTML = firstNumber + operator;
+    })
+}

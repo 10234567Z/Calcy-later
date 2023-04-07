@@ -62,7 +62,7 @@
     transition: 0.8s;
 }
 
-.operator{
+.operator,.specialOperator,.reset{
     color: #35FF2F;
 }
 
