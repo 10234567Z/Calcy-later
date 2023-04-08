@@ -58,6 +58,19 @@ for (i = 0; i < operators.length; i++) {
     })
 }
 
+document.querySelector('.delete').addEventListener('click', (e) => {
+    if(operatorClicked === false){
+        firstInputs.length -= 1;
+        typedText.innerHTML = `${firstInputs.join('')} `;
+    }
+    else{
+        lastInputs.length -= 1;
+        console.log(lastInputs);
+        typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+        calculate();
+    }
+})
+
 
 function calculate() {
 
