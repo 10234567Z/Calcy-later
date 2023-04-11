@@ -21,12 +21,12 @@ for (i = 0; i < numbers.length; i++) {
         e.target.style.fontSize = '0.9em'
 
         /** Build the number before operator while keeping max length and other necessary checks */
-        if (operatorClicked === false && firstInputs.length <= 5 && firstInputs[firstInputs.length - 1] !== '%') {
+        if (operatorClicked === false && firstInputs.length <= 7 && firstInputs[firstInputs.length - 1] !== '%') {
             firstInputs.push(e.target.id);
             typedText.innerHTML = `${firstInputs.join('')}`;
         }
         /** Build the number after operator while keeping max length and other necessary checks */
-        else if (operatorClicked === true && lastInputs.length <= 5 && lastInputs[lastInputs.length - 1] !== '%') {
+        else if (operatorClicked === true && lastInputs.length <= 7 && lastInputs[lastInputs.length - 1] !== '%') {
 
             lastInputs.push(e.target.id);
             typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
@@ -40,7 +40,7 @@ for (i = 0; i < numbers.length; i++) {
     })
 }
 
-document.querySelector('.percentage').addEventListener('mousedown', (e) => {
+document.querySelector('.percentage').addEventListener('mousedown', () => {
     let firstNumber = parseFloat(firstInputs.join(''));
     let lastNumber = parseFloat(lastInputs.join(''));
 
@@ -52,6 +52,7 @@ document.querySelector('.percentage').addEventListener('mousedown', (e) => {
         resultText.innerHTML = value;
         valueChanged = true;
     }
+    /** Puts the percentage value in the tempValue and then let it calculate whole equation in the calculate() function */
     else if(operatorClicked === true && lastInputs.length > 0){
         lastInputs.push('%')
         typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
@@ -65,7 +66,25 @@ document.querySelector('.percentage').addEventListener('mousedown', (e) => {
     }
 })
 
+document.querySelector('.negate').addEventListener('mousedown', () => {
+    /** Negate the first number if the number is typed before operator chosen and it exists */
+    if(operatorClicked === false && firstInputs.length > 0){
+        firstInputs.unshift('-');
+        typedText.innerHTML = `${firstInputs.join('')}`;
+    }
+    /** Negate the last number if the number is typed after operator chosen and it exists */
+    else if(operatorClicked === true && lastInputs.length > 0){
+        lastInputs.unshift('-')
+        typedText.innerHTML = `${firstInputs.join('')} ${operator} (${lastInputs.join('')}`;
+        calculate();
+    }
+    else{
+        alert('Invalid Input');
+    }
+})
+
 document.querySelector('.reset').addEventListener('mousedown', (e) => {
+    /** Basically just reset everything (variable n' all) */
     e.target.style.fontSize = '0.8em'
     typedText.innerHTML = '';
     resultText.innerHTML = '';
@@ -78,12 +97,18 @@ document.querySelector('.reset').addEventListener('mousedown', (e) => {
 })
 
 for (i = 0; i < operators.length; i++) {
+
+    /** Choosing operator upon click of operator buttons */
     operators[i].addEventListener('mousedown', (e) => {
         e.target.style.fontSize = '0.8em'
         operator = e.target.id;
         typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
         operatorClicked = true;
 
+        /** Value change here just defines that if the value has been changed from its initial value or not i.e if the calculator has been used even once before this 
+         * current equation.
+         * So it just resets the previous equation's numbers and push the value in first number
+         */
         if (valueChanged === true) {
             lastInputs.length = 0;
             firstInputs.length = 0;
@@ -91,24 +116,29 @@ for (i = 0; i < operators.length; i++) {
             typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
             resultText.innerHTML = '';
         }
+        /** Puts the value in typed text for cool big font */
         if (operator === '=') {
             typedText.innerHTML = `${firstInputs.join('')} `;
         }
     })
 }
 
-document.querySelector('.delete').addEventListener('mousedown', (e) => {
-
+document.querySelector('.delete').addEventListener('mousedown', () => {
+    /** To not go into operator's if statement */
     valueChanged = false;
+
+    /** if pressing delete before choosing operator , negate from first number */
     if (operatorClicked === false && firstInputs.length > 0) {
         firstInputs.length -= 1;
         typedText.innerHTML = `${firstInputs.join('')} `;
     }
+    /** if pressing delete after choosing operator , negate from last number */
     else if(lastInputs.length > 0) {
         lastInputs.length -= 1;
         typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
         calculate();
     }
+    /** If the last number dont exists and operator exists , pressing delete would clear the operator */
     else if(lastInputs.length === 0 || operatorClicked === true){
         operatorClicked = false;
         operator = '';
@@ -122,6 +152,7 @@ document.querySelector('.delete').addEventListener('mousedown', (e) => {
 })
 
 for (i = 0; i < buttons.length; i++) {
+    /** For the transition of font size on mouseup from button */
     buttons[i].addEventListener('mouseup', (e) => {
         e.target.style.fontSize = '2em'
     })
@@ -131,6 +162,8 @@ function calculate() {
 
     let firstNumber = parseFloat(firstInputs.join(''));
     let lastNumber = parseFloat(lastInputs.join(''));
+
+    /** Value is not changed , so do the normal and basic calculating function */
 
     if (valueChanged === false) {
         if (operator === '+') {
@@ -145,12 +178,12 @@ function calculate() {
         }
         else if (operator === 'x') {
             value = firstNumber * lastNumber;
-            resultText.innerHTML = value.toFixed(2);
+            resultText.innerHTML = value;
             valueChanged = true;
         }
         else if (operator === '÷') {
             value = firstNumber / lastNumber;
-            resultText.innerHTML = value.toFixed(2);
+            resultText.innerHTML = value;
             valueChanged = true;
         }
         else if (operator === '=') {
@@ -160,6 +193,9 @@ function calculate() {
         }
     }
     else {
+        /** Same here but just first number is last value now 
+         *  And for the percentage, It adds the first number and then add the temp value calculated before when % button was pressed
+        */
         if (operator === '+') {
             value = firstNumber + lastNumber;
             resultText.innerHTML = value;
@@ -178,7 +214,7 @@ function calculate() {
         }
         else if (operator === 'x') {
             value = firstNumber * lastNumber;
-            resultText.innerHTML = value.toFixed(2);
+            resultText.innerHTML = value;
             if(lastInputs.includes('%')){
                 value = firstNumber * tempValue;
                 resultText.innerHTML = value;
@@ -186,7 +222,7 @@ function calculate() {
         }
         else if (operator === '÷') {
             value = firstNumber / lastNumber;
-            resultText.innerHTML = value.toFixed(2);
+            resultText.innerHTML = value;
             if(lastInputs.includes('%')){
                 value = firstNumber / tempValue;
                 resultText.innerHTML = value;
@@ -194,3 +230,8 @@ function calculate() {
         }
     }
 }
+
+
+/**
+ * 1 2 3 4 5 6 7 8 9
+ */
