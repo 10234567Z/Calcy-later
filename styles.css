@@ -63,7 +63,7 @@
     background-color: #111111;
     border: 0;
     font-size: 30px;
-    transition: 0.8s;
+    transition: 0.3s;
 }
 
 .operator,
@@ -178,6 +178,26 @@ hr {
 
 .equal:hover {
     background-color: #00DD09;
+}
+
+.add {
+    grid-area: 6/4;
+}
+
+.minus{
+    grid-area: 5/4;
+}
+
+.multiply {
+    grid-area: 4/4;
+}
+
+.divide{
+    grid-area: 3/4;
+}
+
+.percentage {
+    grid-area: 3/3;
 }
 
 /* row start , column start , row end , column end */
