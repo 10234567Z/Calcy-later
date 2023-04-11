@@ -45,7 +45,7 @@ document.querySelector('.percentage').addEventListener('mousedown', () => {
     let lastNumber = parseFloat(lastInputs.join(''));
 
     /** Percentage for the 1st number and calculating it instantly */
-    if(operatorClicked === false && firstInputs.length > 0){
+    if (operatorClicked === false && firstInputs.length > 0) {
         firstInputs.push('%');
         typedText.innerHTML = `${firstInputs.join('')}`;
         value = parseFloat((firstNumber / 100).toFixed(2));
@@ -53,7 +53,7 @@ document.querySelector('.percentage').addEventListener('mousedown', () => {
         valueChanged = true;
     }
     /** Puts the percentage value in the tempValue and then let it calculate whole equation in the calculate() function */
-    else if(operatorClicked === true && lastInputs.length > 0){
+    else if (operatorClicked === true && lastInputs.length > 0) {
         lastInputs.push('%')
         typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
         tempValue = parseFloat((lastNumber / 100).toFixed(2));
@@ -61,24 +61,24 @@ document.querySelector('.percentage').addEventListener('mousedown', () => {
         valueChanged = true;
         calculate();
     }
-    else{
+    else {
         alert('Invalid Input');
     }
 })
 
 document.querySelector('.negate').addEventListener('mousedown', () => {
     /** Negate the first number if the number is typed before operator chosen and it exists */
-    if(operatorClicked === false && firstInputs.length > 0){
+    if (operatorClicked === false && firstInputs.length > 0) {
         firstInputs.unshift('-');
         typedText.innerHTML = `${firstInputs.join('')}`;
     }
     /** Negate the last number if the number is typed after operator chosen and it exists */
-    else if(operatorClicked === true && lastInputs.length > 0){
+    else if (operatorClicked === true && lastInputs.length > 0) {
         lastInputs.unshift('-')
         typedText.innerHTML = `${firstInputs.join('')} ${operator} (${lastInputs.join('')}`;
         calculate();
     }
-    else{
+    else {
         alert('Invalid Input');
     }
 })
@@ -97,13 +97,15 @@ document.querySelector('.reset').addEventListener('mousedown', (e) => {
 })
 
 for (i = 0; i < operators.length; i++) {
-
     /** Choosing operator upon click of operator buttons */
     operators[i].addEventListener('mousedown', (e) => {
-        e.target.style.fontSize = '0.8em'
-        operator = e.target.id;
-        typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
-        operatorClicked = true;
+        if (firstInputs.length > 0) {
+
+            e.target.style.fontSize = '0.8em'
+            operator = e.target.id;
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
+            operatorClicked = true;
+        }
 
         /** Value change here just defines that if the value has been changed from its initial value or not i.e if the calculator has been used even once before this 
          * current equation.
@@ -133,20 +135,20 @@ document.querySelector('.delete').addEventListener('mousedown', () => {
         typedText.innerHTML = `${firstInputs.join('')} `;
     }
     /** if pressing delete after choosing operator , negate from last number */
-    else if(lastInputs.length > 0) {
+    else if (lastInputs.length > 0) {
         lastInputs.length -= 1;
         typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
         calculate();
     }
     /** If the last number dont exists and operator exists , pressing delete would clear the operator */
-    else if(lastInputs.length === 0 || operatorClicked === true){
+    else if (lastInputs.length === 0 || operatorClicked === true) {
         operatorClicked = false;
         operator = '';
         resultText.innerHTML = '';
         value = '';
-        typedText.innerHTML = `${firstInputs.join('')}` ;
+        typedText.innerHTML = `${firstInputs.join('')}`;
     }
-    else{
+    else {
         alert('Invalid Input');
     }
 })
@@ -199,7 +201,7 @@ function calculate() {
         if (operator === '+') {
             value = firstNumber + lastNumber;
             resultText.innerHTML = value;
-            if(lastInputs.includes('%')){
+            if (lastInputs.includes('%')) {
                 value = firstNumber + tempValue;
                 resultText.innerHTML = value;
             }
@@ -207,7 +209,7 @@ function calculate() {
         else if (operator === '-') {
             value = firstNumber - lastNumber;
             resultText.innerHTML = value;
-            if(lastInputs.includes('%')){
+            if (lastInputs.includes('%')) {
                 value = firstNumber - tempValue;
                 resultText.innerHTML = value;
             }
@@ -215,7 +217,7 @@ function calculate() {
         else if (operator === 'x') {
             value = firstNumber * lastNumber;
             resultText.innerHTML = value;
-            if(lastInputs.includes('%')){
+            if (lastInputs.includes('%')) {
                 value = firstNumber * tempValue;
                 resultText.innerHTML = value;
             }
@@ -223,15 +225,10 @@ function calculate() {
         else if (operator === '÷') {
             value = firstNumber / lastNumber;
             resultText.innerHTML = value;
-            if(lastInputs.includes('%')){
+            if (lastInputs.includes('%')) {
                 value = firstNumber / tempValue;
                 resultText.innerHTML = value;
             }
         }
     }
 }
-
-
-/**
- * 1 2 3 4 5 6 7 8 9
- */
