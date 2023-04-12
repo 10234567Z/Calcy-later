@@ -84,16 +84,7 @@ document.querySelector('.negate').addEventListener('mousedown', () => {
 })
 
 document.querySelector('.reset').addEventListener('mousedown', (e) => {
-    /** Basically just reset everything (variable n' all) */
-    e.target.style.fontSize = '0.8em'
-    typedText.innerHTML = '';
-    resultText.innerHTML = '';
-    firstInputs.length = 0;
-    lastInputs.length = 0;
-    value = 0;
-    operator = '';
-    operatorClicked = false;
-    valueChanged = false;
+    Reset(e);
 })
 
 for (i = 0; i < operators.length; i++) {
@@ -118,7 +109,7 @@ for (i = 0; i < operators.length; i++) {
             typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
             resultText.innerHTML = '';
         }
-        /** Puts the value in typed text for cool big font */
+        /** Put the equalized value on front*/
         if (operator === '=') {
             typedText.innerHTML = `${firstInputs.join('')} `;
         }
@@ -159,6 +150,49 @@ for (i = 0; i < buttons.length; i++) {
         e.target.style.fontSize = '2em'
     })
 }
+
+document.addEventListener('keydown', (e) => {
+    Keyboard(e);
+    if (firstInputs.length > 0 && valueChanged === false) {
+        if (e.key === '*') {
+            operator = 'x';
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
+            operatorClicked = true;
+        }
+        else if (e.key === '-') {
+            operator = '-';
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
+            operatorClicked = true;
+        }
+        else if (e.key === '+') {
+            operator = '+';
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
+            operatorClicked = true;
+        }
+        else if (e.key === '/') {
+            operator = '÷';
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
+            operatorClicked = true;
+        }
+        else if (e.key === 'c' || e.key === 'C' || e.key === 'Escape') {
+            Reset(e);
+        }
+        else if (e.key === '=' || e.key === 'Enter') {
+            calculate()
+            operatorClicked = true;
+            lastInputs.length = 0;
+        }
+    }
+    else if (valueChanged === true) {
+        lastInputs.length = 0;
+        firstInputs.length = 0;
+        firstInputs.push(value.toFixed(2));
+        typedText.innerHTML = `${firstInputs.join('')}`;
+        resultText.innerHTML = '';
+         valueChanged = false;
+        Keyboard(e);
+    }
+})
 
 function calculate() {
 
@@ -229,6 +263,39 @@ function calculate() {
                 value = firstNumber / tempValue;
                 resultText.innerHTML = value;
             }
+        }
+    }
+}
+
+function Reset(e) {
+    /** Basically just reset everything (variable n' all) */
+    e.target.style.fontSize = '0.8em'
+    typedText.innerHTML = '';
+    resultText.innerHTML = '';
+    firstInputs.length = 0;
+    lastInputs.length = 0;
+    value = 0;
+    operator = '';
+    operatorClicked = false;
+    valueChanged = false;
+}
+
+function Keyboard(e) {
+    if (isFinite(e.key)) {
+        /** Build the number before operator while keeping max length and other necessary checks */
+        if (operatorClicked === false && firstInputs.length <= 7 && firstInputs[firstInputs.length - 1] !== '%') {
+            firstInputs.push(e.key);
+            typedText.innerHTML = `${firstInputs.join('')}`;
+        }
+        /** Build the number after operator while keeping max length and other necessary checks */
+        else if (operatorClicked === true && lastInputs.length <= 7 && lastInputs[lastInputs.length - 1] !== '%') {
+
+            lastInputs.push(e.key);
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+        }
+        /** If none of the above criteria meets , its invalid for calculator */
+        else {
+            alert('Invalid Input');
         }
     }
 }
