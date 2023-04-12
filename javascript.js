@@ -225,6 +225,12 @@ function calculate() {
             }
         }
     }
+    
+
+    if(value === Infinity){
+        alert("Inavlid Inputs")
+        Reset();
+    }
 }
 
 function Reset(e) {
@@ -295,21 +301,25 @@ function Backspace() {
         typedText.innerHTML = `${firstInputs.join('')} `;
     }
     /** if pressing delete after choosing operator , negate from last number */
-    else if (lastInputs.length > 0) {
+    else if (lastInputs.length > 1) {
         lastInputs.length -= 1;
         typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
         calculate();
     }
+    else if(lastInputs.length === 1){
+        lastInputs.length -= 1;
+        typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+        resultText.innerHTML = "";
+    }
     /** If the last number dont exists and operator exists , pressing delete would clear the operator */
-    else if (lastInputs.length === 0 || operatorClicked === true) {
+    else if (lastInputs.length === 0 && operatorClicked === true) {
         operatorClicked = false;
         operator = '';
         resultText.innerHTML = '';
-        value = '';
+        value = 0;
         typedText.innerHTML = `${firstInputs.join('')}`;
     }
     else {
         alert('Invalid Input');
     }
-
 }
