@@ -41,29 +41,7 @@ for (i = 0; i < numbers.length; i++) {
 }
 
 document.querySelector('.percentage').addEventListener('mousedown', () => {
-    let firstNumber = parseFloat(firstInputs.join(''));
-    let lastNumber = parseFloat(lastInputs.join(''));
-
-    /** Percentage for the 1st number and calculating it instantly */
-    if (operatorClicked === false && firstInputs.length > 0) {
-        firstInputs.push('%');
-        typedText.innerHTML = `${firstInputs.join('')}`;
-        value = parseFloat((firstNumber / 100).toFixed(2));
-        resultText.innerHTML = value;
-        valueChanged = true;
-    }
-    /** Puts the percentage value in the tempValue and then let it calculate whole equation in the calculate() function */
-    else if (operatorClicked === true && lastInputs.length > 0) {
-        lastInputs.push('%')
-        typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
-        tempValue = parseFloat((lastNumber / 100).toFixed(2));
-        resultText.innerHTML = value;
-        valueChanged = true;
-        calculate();
-    }
-    else {
-        alert('Invalid Input');
-    }
+    percentage();
 })
 
 document.querySelector('.negate').addEventListener('mousedown', () => {
@@ -117,31 +95,7 @@ for (i = 0; i < operators.length; i++) {
 }
 
 document.querySelector('.delete').addEventListener('mousedown', () => {
-    /** To not go into operator's if statement */
-    valueChanged = false;
-
-    /** if pressing delete before choosing operator , negate from first number */
-    if (operatorClicked === false && firstInputs.length > 0) {
-        firstInputs.length -= 1;
-        typedText.innerHTML = `${firstInputs.join('')} `;
-    }
-    /** if pressing delete after choosing operator , negate from last number */
-    else if (lastInputs.length > 0) {
-        lastInputs.length -= 1;
-        typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
-        calculate();
-    }
-    /** If the last number dont exists and operator exists , pressing delete would clear the operator */
-    else if (lastInputs.length === 0 || operatorClicked === true) {
-        operatorClicked = false;
-        operator = '';
-        resultText.innerHTML = '';
-        value = '';
-        typedText.innerHTML = `${firstInputs.join('')}`;
-    }
-    else {
-        alert('Invalid Input');
-    }
+    Backspace();
 })
 
 for (i = 0; i < buttons.length; i++) {
@@ -151,6 +105,9 @@ for (i = 0; i < buttons.length; i++) {
     })
 }
 
+/** TLDR; If value changed is false normally take in keyboard inputs and calculate if its true , then reset calculator make the value changed false and
+ * again make the calculator pick up the keyboard inputs.
+ */
 document.addEventListener('keydown', (e) => {
     Keyboard(e);
     if (firstInputs.length > 0 && valueChanged === false) {
@@ -174,6 +131,9 @@ document.addEventListener('keydown', (e) => {
             typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
             operatorClicked = true;
         }
+        else if (e.key === '%') {
+            percentage();
+        }
         else if (e.key === 'c' || e.key === 'C' || e.key === 'Escape') {
             Reset(e);
         }
@@ -189,7 +149,7 @@ document.addEventListener('keydown', (e) => {
         firstInputs.push(value.toFixed(2));
         typedText.innerHTML = `${firstInputs.join('')}`;
         resultText.innerHTML = '';
-         valueChanged = false;
+        valueChanged = false;
         Keyboard(e);
     }
 })
@@ -269,7 +229,6 @@ function calculate() {
 
 function Reset(e) {
     /** Basically just reset everything (variable n' all) */
-    e.target.style.fontSize = '0.8em'
     typedText.innerHTML = '';
     resultText.innerHTML = '';
     firstInputs.length = 0;
@@ -281,7 +240,7 @@ function Reset(e) {
 }
 
 function Keyboard(e) {
-    if (isFinite(e.key)) {
+    if (isFinite(e.key) || e.key === '.') {
         /** Build the number before operator while keeping max length and other necessary checks */
         if (operatorClicked === false && firstInputs.length <= 7 && firstInputs[firstInputs.length - 1] !== '%') {
             firstInputs.push(e.key);
@@ -298,4 +257,59 @@ function Keyboard(e) {
             alert('Invalid Input');
         }
     }
+}
+
+function percentage() {
+    let firstNumber = parseFloat(firstInputs.join(''));
+    let lastNumber = parseFloat(lastInputs.join(''));
+
+    /** Percentage for the 1st number and calculating it instantly */
+    if (operatorClicked === false && firstInputs.length > 0) {
+        firstInputs.push('%');
+        typedText.innerHTML = `${firstInputs.join('')}`;
+        value = parseFloat((firstNumber / 100).toFixed(2));
+        resultText.innerHTML = value;
+        valueChanged = true;
+    }
+    /** Puts the percentage value in the tempValue and then let it calculate whole equation in the calculate() function */
+    else if (operatorClicked === true && lastInputs.length > 0) {
+        lastInputs.push('%')
+        typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+        tempValue = parseFloat((lastNumber / 100).toFixed(2));
+        resultText.innerHTML = value;
+        valueChanged = true;
+        calculate();
+    }
+    else {
+        alert('Invalid Input');
+    }
+}
+
+function Backspace() {
+    /** To not go into operator's if statement */
+    valueChanged = false;
+
+    /** if pressing delete before choosing operator , negate from first number */
+    if (operatorClicked === false && firstInputs.length > 0) {
+        firstInputs.length -= 1;
+        typedText.innerHTML = `${firstInputs.join('')} `;
+    }
+    /** if pressing delete after choosing operator , negate from last number */
+    else if (lastInputs.length > 0) {
+        lastInputs.length -= 1;
+        typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+        calculate();
+    }
+    /** If the last number dont exists and operator exists , pressing delete would clear the operator */
+    else if (lastInputs.length === 0 || operatorClicked === true) {
+        operatorClicked = false;
+        operator = '';
+        resultText.innerHTML = '';
+        value = '';
+        typedText.innerHTML = `${firstInputs.join('')}`;
+    }
+    else {
+        alert('Invalid Input');
+    }
+
 }
