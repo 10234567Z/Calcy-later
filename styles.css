@@ -18,8 +18,8 @@
 .calculator {
     grid-area: 2/2;
     background-color: black;
-    min-width: 32%;
-    min-height: 90%;
+    width: 350px;
+    height: 580px;
     border-radius: 25px;
     margin-left: 15px;
     margin-right: 15px;
