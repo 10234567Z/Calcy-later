@@ -22,15 +22,32 @@ for (i = 0; i < numbers.length; i++) {
 
         /** Build the number before operator while keeping max length and other necessary checks */
         if (operatorClicked === false && firstInputs.length <= 7 && firstInputs[firstInputs.length - 1] !== '%') {
-            firstInputs.push(e.target.id);
-            typedText.innerHTML = `${firstInputs.join('')}`;
+            if (e.target.id === '.' && firstInputs.length < 1) {
+                alert('Invalid Input')
+            }
+            else if (e.target.id === '.' && firstInputs.includes('.')) {
+                alert('Invalid Input')
+            }
+            else {
+                firstInputs.push(e.target.id);
+                typedText.innerHTML = `${firstInputs.join('')}`;
+            }
         }
         /** Build the number after operator while keeping max length and other necessary checks */
         else if (operatorClicked === true && lastInputs.length <= 7 && lastInputs[lastInputs.length - 1] !== '%') {
 
-            lastInputs.push(e.target.id);
-            typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
-            calculate();
+
+            if (e.target.id === '.' && lastInputs.length < 1) {
+                resultText.innerHTML = 'Invalid Input';
+            }
+            else if (e.target.id === '.' && lastInputs.includes('.')) {
+                alert('Invalid Input')
+            }
+            else {
+                lastInputs.push(e.target.id);
+                typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+                calculate();
+            }
         }
         /** If none of the above criteria meets , its invalid for calculator */
         else {
@@ -61,14 +78,14 @@ document.querySelector('.negate').addEventListener('mousedown', () => {
     }
 })
 
-document.querySelector('.reset').addEventListener('mousedown', (e) => {
-    Reset(e);
+document.querySelector('.reset').addEventListener('mousedown', () => {
+    Reset();
 })
 
 for (i = 0; i < operators.length; i++) {
     /** Choosing operator upon click of operator buttons */
     operators[i].addEventListener('mousedown', (e) => {
-        if (firstInputs.length > 0) {
+        if (firstInputs.length >= 1 && firstInputs.length !== 1 && firstInputs[0] !== '.') {
 
             e.target.style.fontSize = '0.8em'
             operator = e.target.id;
@@ -225,15 +242,15 @@ function calculate() {
             }
         }
     }
-    
 
-    if(value === Infinity){
-        alert("Inavlid Inputs")
-        Reset();
+
+    if (value === Infinity || value === NaN) {
+        value = 0;
+        resultText.innerHTML = '';
     }
 }
 
-function Reset(e) {
+function Reset() {
     /** Basically just reset everything (variable n' all) */
     typedText.innerHTML = '';
     resultText.innerHTML = '';
@@ -271,20 +288,32 @@ function percentage() {
 
     /** Percentage for the 1st number and calculating it instantly */
     if (operatorClicked === false && firstInputs.length > 0) {
-        firstInputs.push('%');
-        typedText.innerHTML = `${firstInputs.join('')}`;
-        value = parseFloat((firstNumber / 100).toFixed(2));
-        resultText.innerHTML = value;
-        valueChanged = true;
+
+        if (firstInputs.includes('%')) {
+            alert('Invalid Input')
+        }
+        else {
+            firstInputs.push('%');
+            typedText.innerHTML = `${firstInputs.join('')}`;
+            value = parseFloat((firstNumber / 100).toFixed(2));
+            resultText.innerHTML = value;
+            valueChanged = true;
+        }
     }
     /** Puts the percentage value in the tempValue and then let it calculate whole equation in the calculate() function */
     else if (operatorClicked === true && lastInputs.length > 0) {
-        lastInputs.push('%')
-        typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
-        tempValue = parseFloat((lastNumber / 100).toFixed(2));
-        resultText.innerHTML = value;
-        valueChanged = true;
-        calculate();
+
+        if (lastInputs.includes('%')) {
+            alert('Invalid Input')
+        }
+        else {
+            lastInputs.push('%')
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+            tempValue = parseFloat((lastNumber / 100).toFixed(2));
+            resultText.innerHTML = value;
+            valueChanged = true;
+            calculate();
+        }
     }
     else {
         alert('Invalid Input');
@@ -306,7 +335,7 @@ function Backspace() {
         typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
         calculate();
     }
-    else if(lastInputs.length === 1){
+    else if (lastInputs.length === 1) {
         lastInputs.length -= 1;
         typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
         resultText.innerHTML = "";
