@@ -35,8 +35,6 @@ for (i = 0; i < numbers.length; i++) {
         }
         /** Build the number after operator while keeping max length and other necessary checks */
         else if (operatorClicked === true && lastInputs.length <= 7 && lastInputs[lastInputs.length - 1] !== '%') {
-
-
             if (e.target.id === '.' && lastInputs.length < 1) {
                 resultText.innerHTML = 'Invalid Input';
             }
@@ -85,7 +83,7 @@ document.querySelector('.reset').addEventListener('mousedown', () => {
 for (i = 0; i < operators.length; i++) {
     /** Choosing operator upon click of operator buttons */
     operators[i].addEventListener('mousedown', (e) => {
-        if (firstInputs.length >= 1 && firstInputs.length !== 1 && firstInputs[0] !== '.') {
+        if (firstInputs.length >= 1 && firstInputs[0] !== '.') {
 
             e.target.style.fontSize = '0.8em'
             operator = e.target.id;
@@ -266,14 +264,32 @@ function Keyboard(e) {
     if (isFinite(e.key) || e.key === '.') {
         /** Build the number before operator while keeping max length and other necessary checks */
         if (operatorClicked === false && firstInputs.length <= 7 && firstInputs[firstInputs.length - 1] !== '%') {
-            firstInputs.push(e.key);
-            typedText.innerHTML = `${firstInputs.join('')}`;
+
+            if (e.key === '.' && firstInputs.length < 1) {
+                alert('Invalid Input')
+            }
+            else if (e.key === '.' && firstInputs.includes('.')) {
+                alert('Invalid Input')
+            }
+            else {
+                firstInputs.push(e.key);
+                typedText.innerHTML = `${firstInputs.join('')}`;
+            }
+
         }
         /** Build the number after operator while keeping max length and other necessary checks */
         else if (operatorClicked === true && lastInputs.length <= 7 && lastInputs[lastInputs.length - 1] !== '%') {
 
-            lastInputs.push(e.key);
-            typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+            if (e.key === '.' && lastInputs.length < 1) {
+                resultText.innerHTML = 'Invalid Input';
+            }
+            else if (e.key === '.' && lastInputs.includes('.')) {
+                alert('Invalid Input')
+            }
+            else {
+                lastInputs.push(e.key);
+                typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+            }
         }
         /** If none of the above criteria meets , its invalid for calculator */
         else {
