@@ -261,7 +261,7 @@ function calculate() {
 
     if (value === Infinity || value === NaN) {
         value = 0;
-        resultText.innerHTML = 'Infintiy';
+        resultText.innerHTML = 'Infinity';
     }
 }
 
