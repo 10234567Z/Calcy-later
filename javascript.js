@@ -5,6 +5,7 @@ let buttons = document.querySelectorAll('.buttons');
 let typedText = document.querySelector('.typeText');
 let resultText = document.querySelector('.resultText');
 let resultBox = document.querySelector('.result');
+let calculator = document.querySelector('.calculator');
 
 let firstInputs = [];
 let lastInputs = [];
@@ -91,12 +92,16 @@ for (i = 0; i < operators.length; i++) {
     operators[i].addEventListener('mousedown', (e) => {
         if (firstInputs.length >= 1 && firstInputs[0] !== '.' && e.target.id !== '=') {
 
+            if(value.toString().length > 10){
+                console.log('blabla');
+                calculator.style.gridTemplateRows = '30% 5% 13% 13% 13% 13% 13%';
+            }
             e.target.style.fontSize = '0.8em'
             operator = e.target.id;
             typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
             operatorClicked = true;
         }
-        else if(e.target.id === '='){
+        else if (e.target.id === '=') {
             e.target.style.fontSize = '0.8em'
             operator = e.target.id;
         }
@@ -270,6 +275,7 @@ function Reset() {
     operator = '';
     operatorClicked = false;
     valueChanged = false;
+    calculator.style.gridTemplateRows = '20% 5% 15% 15% 15% 15% 15%';
 }
 
 function Keyboard(e) {
