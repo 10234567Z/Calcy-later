@@ -23,7 +23,9 @@ for (i = 0; i < numbers.length; i++) {
         /** Build the number before operator while keeping max length and other necessary checks */
         if (operatorClicked === false && firstInputs.length <= 7 && firstInputs[firstInputs.length - 1] !== '%') {
             if (e.target.id === '.' && firstInputs.length < 1) {
-                alert('Invalid Input')
+                firstInputs[0] = 0;
+                firstInputs.push(e.target.id);
+                typedText.innerHTML = `${firstInputs.join('')}`;
             }
             else if (e.target.id === '.' && firstInputs.includes('.')) {
                 alert('Invalid Input')
@@ -36,7 +38,10 @@ for (i = 0; i < numbers.length; i++) {
         /** Build the number after operator while keeping max length and other necessary checks */
         else if (operatorClicked === true && lastInputs.length <= 7 && lastInputs[lastInputs.length - 1] !== '%') {
             if (e.target.id === '.' && lastInputs.length < 1) {
-                resultText.innerHTML = 'Invalid Input';
+                lastInputs[0] = 0;
+                lastInputs.push(e.target.id);
+                typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+
             }
             else if (e.target.id === '.' && lastInputs.includes('.')) {
                 alert('Invalid Input')
@@ -244,7 +249,7 @@ function calculate() {
 
     if (value === Infinity || value === NaN) {
         value = 0;
-        resultText.innerHTML = '';
+        resultText.innerHTML = 'Infintiy';
     }
 }
 
@@ -266,7 +271,9 @@ function Keyboard(e) {
         if (operatorClicked === false && firstInputs.length <= 7 && firstInputs[firstInputs.length - 1] !== '%') {
 
             if (e.key === '.' && firstInputs.length < 1) {
-                alert('Invalid Input')
+                firstInputs[0] = 0;
+                firstInputs.push(e.key);
+                typedText.innerHTML = `${firstInputs.join('')}`;
             }
             else if (e.key === '.' && firstInputs.includes('.')) {
                 alert('Invalid Input')
@@ -281,7 +288,9 @@ function Keyboard(e) {
         else if (operatorClicked === true && lastInputs.length <= 7 && lastInputs[lastInputs.length - 1] !== '%') {
 
             if (e.key === '.' && lastInputs.length < 1) {
-                resultText.innerHTML = 'Invalid Input';
+                lastInputs[0] = 0;
+                lastInputs.push(e.key);
+                typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
             }
             else if (e.key === '.' && lastInputs.includes('.')) {
                 alert('Invalid Input')
