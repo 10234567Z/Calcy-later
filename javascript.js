@@ -93,8 +93,10 @@ for (i = 0; i < operators.length; i++) {
         if (firstInputs.length >= 1 && firstInputs[0] !== '.' && e.target.id !== '=') {
 
             if(value.toString().length > 10){
-                console.log('blabla');
                 calculator.style.gridTemplateRows = '30% 5% 13% 13% 13% 13% 13%';
+            }
+            else{
+                calculator.style.gridTemplateRows = '20% 5% 15% 15% 15% 15% 15%';
             }
             e.target.style.fontSize = '0.8em'
             operator = e.target.id;
