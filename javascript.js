@@ -92,7 +92,7 @@ for (i = 0; i < operators.length; i++) {
     operators[i].addEventListener('mousedown', (e) => {
         if (firstInputs.length >= 1 && firstInputs[0] !== '.' && e.target.id !== '=') {
 
-            if(value.toString().length > 10){
+            if(value.toFixed(2).length > 10){
                 calculator.style.gridTemplateRows = '30% 5% 13% 13% 13% 13% 13%';
             }
             else{
