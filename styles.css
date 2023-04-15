@@ -20,7 +20,7 @@
     grid-area: 2/2;
     background-color: black;
     width: 350px;
-    height: 580px;
+    height: 600px;
     border-radius: 25px;
     margin-left: 15px;
     margin-right: 15px;
@@ -38,6 +38,8 @@
     grid-template-rows: 70% 30%;
     grid-template-columns: 100%;
     place-items: end;
+    word-wrap:break-word ;
+    word-break: break-all;
 }
 
 .typeText {

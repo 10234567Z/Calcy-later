@@ -4,6 +4,7 @@ let operators = document.querySelectorAll('.operator');
 let buttons = document.querySelectorAll('.buttons');
 let typedText = document.querySelector('.typeText');
 let resultText = document.querySelector('.resultText');
+let resultBox = document.querySelector('.result');
 
 let firstInputs = [];
 let lastInputs = [];
@@ -88,12 +89,16 @@ document.querySelector('.reset').addEventListener('mousedown', () => {
 for (i = 0; i < operators.length; i++) {
     /** Choosing operator upon click of operator buttons */
     operators[i].addEventListener('mousedown', (e) => {
-        if (firstInputs.length >= 1 && firstInputs[0] !== '.') {
+        if (firstInputs.length >= 1 && firstInputs[0] !== '.' && e.target.id !== '=') {
 
             e.target.style.fontSize = '0.8em'
             operator = e.target.id;
             typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
             operatorClicked = true;
+        }
+        else if(e.target.id === '='){
+            e.target.style.fontSize = '0.8em'
+            operator = e.target.id;
         }
 
         /** Value change here just defines that if the value has been changed from its initial value or not i.e if the calculator has been used even once before this 
@@ -158,9 +163,11 @@ document.addEventListener('keydown', (e) => {
             Reset(e);
         }
         else if (e.key === '=' || e.key === 'Enter') {
-            calculate()
-            operatorClicked = true;
-            lastInputs.length = 0;
+            if (lastInputs.length > 1) {
+                calculate()
+                operatorClicked = true;
+                lastInputs.length = 0;
+            }
         }
     }
     else if (valueChanged === true) {
@@ -281,6 +288,7 @@ function Keyboard(e) {
             else {
                 firstInputs.push(e.key);
                 typedText.innerHTML = `${firstInputs.join('')}`;
+
             }
 
         }
