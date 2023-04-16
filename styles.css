@@ -71,7 +71,8 @@
 
 .operator,
 .specialOperator,
-.reset {
+.reset,
+.equal {
     color: #35FF2F;
 }
 

@@ -68,14 +68,23 @@ document.querySelector('.percentage').addEventListener('mousedown', () => {
 
 document.querySelector('.negate').addEventListener('mousedown', () => {
     /** Negate the first number if the number is typed before operator chosen and it exists */
-    if (operatorClicked === false && firstInputs.length > 0) {
+    if (operatorClicked === false && firstInputs.length > 0 && !(firstInputs.includes('-'))) {
         firstInputs.unshift('-');
         typedText.innerHTML = `${firstInputs.join('')}`;
     }
     /** Negate the last number if the number is typed after operator chosen and it exists */
-    else if (operatorClicked === true && lastInputs.length > 0) {
-        lastInputs.unshift('-')
+    else if (operatorClicked === true && lastInputs.length > 0 && !(lastInputs.includes('-'))) {
+        lastInputs.unshift('-');
         typedText.innerHTML = `${firstInputs.join('')} ${operator} (${lastInputs.join('')}`;
+        calculate();
+    }
+    else if(firstInputs.includes('-') && operatorClicked === false){
+        firstInputs.shift();
+        typedText.innerHTML = `${firstInputs.join('')}`;
+    }
+    else if(lastInputs.includes('-') && operatorClicked === true){
+        lastInputs.shift();
+        typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
         calculate();
     }
     else {
@@ -90,7 +99,7 @@ document.querySelector('.reset').addEventListener('mousedown', () => {
 for (i = 0; i < operators.length; i++) {
     /** Choosing operator upon click of operator buttons */
     operators[i].addEventListener('mousedown', (e) => {
-        if (firstInputs.length >= 1 && firstInputs[0] !== '.' && e.target.id !== '=') {
+        if (firstInputs.length >= 1 && firstInputs.join('') !== '0.' && firstInputs.join('') !== '-0.') {
 
             if(value.toFixed(2).length > 10){
                 calculator.style.gridTemplateRows = '30% 5% 13% 13% 13% 13% 13%';
@@ -103,10 +112,6 @@ for (i = 0; i < operators.length; i++) {
             typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
             operatorClicked = true;
         }
-        else if (e.target.id === '=') {
-            e.target.style.fontSize = '0.8em'
-            operator = e.target.id;
-        }
 
         /** Value change here just defines that if the value has been changed from its initial value or not i.e if the calculator has been used even once before this 
          * current equation.
@@ -115,13 +120,9 @@ for (i = 0; i < operators.length; i++) {
         if (valueChanged === true) {
             lastInputs.length = 0;
             firstInputs.length = 0;
-            firstInputs.push(value.toFixed(2));
-            typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
+            firstInputs = Array.from(value.toFixed(2));
+            typedText.innerHTML = `${firstInputs.join('')} ${operator}`
             resultText.innerHTML = '';
-        }
-        /** Put the equalized value on front*/
-        if (operator === '=') {
-            typedText.innerHTML = `${firstInputs.join('')} `;
         }
     })
 }
@@ -167,20 +168,17 @@ document.addEventListener('keydown', (e) => {
             percentage();
         }
         else if (e.key === 'c' || e.key === 'C' || e.key === 'Escape') {
-            Reset(e);
+            Reset();
         }
-        else if (e.key === '=' || e.key === 'Enter') {
-            if (lastInputs.length > 1) {
-                calculate()
-                operatorClicked = true;
-                lastInputs.length = 0;
-            }
+        else if(e.key === 'Enter' || e.key === '='){
+            calculate();
+            Equals();
         }
     }
     else if (valueChanged === true) {
         lastInputs.length = 0;
-        firstInputs.length = 0;
-        firstInputs.push(value.toFixed(2));
+        operator = '';
+        firstInputs = Array.from(value.toFixed(2));
         typedText.innerHTML = `${firstInputs.join('')}`;
         resultText.innerHTML = '';
         valueChanged = false;
@@ -188,6 +186,9 @@ document.addEventListener('keydown', (e) => {
     }
 })
 
+document.querySelector('.equal').addEventListener('mousedown', () => {
+    Equals();
+})
 function calculate() {
 
     let firstNumber = parseFloat(firstInputs.join(''));
@@ -214,11 +215,6 @@ function calculate() {
         else if (operator === '÷') {
             value = firstNumber / lastNumber;
             resultText.innerHTML = value;
-            valueChanged = true;
-        }
-        else if (operator === '=') {
-            typedText.innerHTML = value.toFixed(2);
-            resultText.innerHTML = '';
             valueChanged = true;
         }
     }
@@ -262,8 +258,8 @@ function calculate() {
 
 
     if (value === Infinity || value === NaN) {
-        value = 0;
-        resultText.innerHTML = 'Infinity';
+        value = 'Infinity';
+        resultText.innerHTML = '';
     }
 }
 
@@ -391,5 +387,23 @@ function Backspace() {
     }
     else {
         alert('Invalid Input');
+    }
+}
+
+function Equals() {
+    let lastNumber = parseFloat(lastInputs.join(''));
+    if(value === 'Infinity' || lastNumber === 0. && operator === '÷'){
+        alert('Cant divide with zero');
+        Reset();
+    }
+    else{
+        firstInputs.length = 0;
+        lastInputs.length = 0;
+        operator = '';
+        typedText.innerHTML = value.toFixed(2);
+        resultText.innerHTML = '';
+        firstInputs = Array.from(value.toFixed(2));
+        operatorClicked = false;
+        valueChanged = false;
     }
 }
