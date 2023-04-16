@@ -262,7 +262,7 @@ function calculate() {
     }
 
 
-    if (value === Infinity || value === NaN) {
+    if (value === Infinity || value === NaN || value === -Infinity) {
         value = 'Infinity';
         resultText.innerHTML = '';
     }
