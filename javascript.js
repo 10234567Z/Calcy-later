@@ -32,6 +32,9 @@ for (i = 0; i < numbers.length; i++) {
             else if (e.target.id === '.' && firstInputs.includes('.')) {
                 return null
             }
+            else if(firstInputs[0] === '0' && e.target.id === '0'){
+                return null;
+            }
             else {
                 firstInputs.push(e.target.id);
                 typedText.innerHTML = `${firstInputs.join('')}`;
@@ -46,6 +49,9 @@ for (i = 0; i < numbers.length; i++) {
 
             }
             else if (e.target.id === '.' && lastInputs.includes('.')) {
+                return null;
+            }
+            else if(lastInputs[0] === '0' && e.target.id === '0'){
                 return null;
             }
             else {
@@ -171,10 +177,16 @@ document.addEventListener('keydown', (e) => {
             calculate();
             Equals();
         }
+        if(value.toFixed(2).length > 10){
+            calculator.style.gridTemplateRows = '30% 5% 13% 13% 13% 13% 13%';
+        }
+        else{
+            calculator.style.gridTemplateRows = '20% 5% 15% 15% 15% 15% 15%';
+        }
     }
-    else if (valueChanged === true) {
+    else if (valueChanged === true && operatorClicked === false) {
         lastInputs.length = 0;
-        operator = '';
+        firstInputs.length = 0;
         firstInputs = Array.from(value.toFixed(2));
         typedText.innerHTML = `${firstInputs.join('')}`;
         resultText.innerHTML = '';
@@ -275,6 +287,7 @@ function Reset() {
 
 function Keyboard(e) {
     if (isFinite(e.key) || e.key === '.') {
+        valueChanged = false;
         /** Build the number before operator while keeping max length and other necessary checks */
         if (operatorClicked === false && firstInputs.length <= 7 && firstInputs[firstInputs.length - 1] !== '%') {
 
@@ -286,10 +299,12 @@ function Keyboard(e) {
             else if (e.key === '.' && firstInputs.includes('.')) {
                 return null;
             }
+            else if(firstInputs[0] === '0' && e.key === '0'){
+                return null;
+            }
             else {
                 firstInputs.push(e.key);
                 typedText.innerHTML = `${firstInputs.join('')}`;
-
             }
 
         }
@@ -300,6 +315,9 @@ function Keyboard(e) {
                 lastInputs[0] = 0;
                 lastInputs.push(e.key);
                 typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+            }
+            else if(lastInputs[0] === '0' && e.key === '0'){
+                return null;
             }
             else if (e.key === '.' && lastInputs.includes('.')) {
                 return null;
