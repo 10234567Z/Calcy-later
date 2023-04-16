@@ -146,6 +146,8 @@ for (i = 0; i < buttons.length; i++) {
  */
 document.addEventListener('keydown', (e) => {
     Keyboard(e);
+    valueChanged = false;
+    resultText.innerHTML = '';
     if (firstInputs.length > 0 && valueChanged === false) {
         if (e.key === '*') {
             operator = 'x';
