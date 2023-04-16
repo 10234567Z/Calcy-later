@@ -188,14 +188,22 @@ document.addEventListener('keydown', (e) => {
         }
     }
     if (e.key === 'Enter' || e.key === '=') {
-        calculate();
-        Equals();
+        if (lastInputs.length === 0) {
+            return null;
+        }
+        else {
+            calculate();
+            Equals();
+        }
     }
     if (e.key === 'c' || e.key === 'C' || e.key === 'Escape') {
         Reset();
     }
     if (e.key === '%') {
         percentage();
+    }
+    if(e.key === 'Backspace'){
+        Backspace();
     }
 })
 
@@ -385,8 +393,17 @@ function Backspace() {
 
     /** if pressing delete before choosing operator , negate from first number */
     if (operatorClicked === false && firstInputs.length > 0) {
-        firstInputs.length -= 1;
-        typedText.innerHTML = `${firstInputs.join('')} `;
+        if (firstInputs.includes('%')) {
+            firstInputs.length -= 1;
+            typedText.innerHTML = `${firstInputs.join('')} `;
+            resultText.innerHTML = '';
+            value = parseFloat(firstInputs.join(''));
+        }
+        else {
+            firstInputs.length -= 1;
+            typedText.innerHTML = `${firstInputs.join('')} `;
+            value = parseFloat(firstInputs.join(''));
+        }
     }
     /** if pressing delete after choosing operator , negate from last number */
     else if (lastInputs.length > 1) {
@@ -414,6 +431,9 @@ function Equals() {
     if (value === 'Infinity' || lastNumber === 0. && operator === '÷') {
         alert('Cant divide with zero');
         Reset();
+    }
+    else if (lastInputs.length === 0) {
+        return null;
     }
     else {
         firstInputs.length = 0;
