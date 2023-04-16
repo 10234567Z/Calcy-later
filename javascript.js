@@ -139,7 +139,7 @@ document.addEventListener('keydown', (e) => {
     Keyboard(e);
     resultText.innerHTML = '';
     valueChanged = false;
-    if (firstInputs.length > 0 && valueChanged === false && operatorClicked === false) {
+    if (firstInputs.length > 0 && valueChanged === false && operatorClicked === false && firstInputs.join('') !== '0.' && firstInputs.join('') !== '-0.') {
         calculate();
         if (e.key === '*') {
             operator = 'x';
@@ -262,7 +262,7 @@ function calculate() {
     }
 
 
-    if (value === Infinity || value === NaN || value === -Infinity) {
+    if (value === Infinity || value === NaN || value === -Infinity || (firstNumber === 0 && lastNumber === 0)) {
         value = 'Infinity';
         resultText.innerHTML = '';
     }
@@ -449,7 +449,7 @@ function Negation(){
         /** Negate the last number if the number is typed after operator chosen and it exists */
         else if (operatorClicked === true && lastInputs.length > 0 && !(lastInputs.includes('-'))) {
             lastInputs.unshift('-');
-            typedText.innerHTML = `${firstInputs.join('')} ${operator} (${lastInputs.join('')}`;
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
             calculate();
         }
         else if (firstInputs.includes('-') && operatorClicked === false) {
