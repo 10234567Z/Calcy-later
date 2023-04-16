@@ -146,8 +146,9 @@ for (i = 0; i < buttons.length; i++) {
  */
 document.addEventListener('keydown', (e) => {
     Keyboard(e);
-    valueChanged = false;
+    calculate();
     resultText.innerHTML = '';
+    valueChanged = false;
     if (firstInputs.length > 0 && valueChanged === false) {
         if (e.key === '*') {
             operator = 'x';
@@ -179,7 +180,7 @@ document.addEventListener('keydown', (e) => {
             calculate();
             Equals();
         }
-        if(value.toFixed(2).length > 10){
+        if(value.toFixed(2).length > 10 && isFinite(value)){
             calculator.style.gridTemplateRows = '30% 5% 13% 13% 13% 13% 13%';
         }
         else{
