@@ -407,9 +407,18 @@ function Backspace() {
     }
     /** if pressing delete after choosing operator , negate from last number */
     else if (lastInputs.length > 1) {
-        lastInputs.length -= 1;
-        typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
-        calculate();
+
+        if((lastInputs[0] === '-' && lastInputs.length === 2) || (lastInputs[0] === '-' && lastInputs[1] === '0' && lastInputs[2] === '.' && lastInputs.length === 4)){
+            lastInputs.length -= 1;
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+            value = null;
+            resultText.innerHTML = '';
+        }
+        else{
+            lastInputs.length -= 1;
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+            calculate();
+        }
     }
     else if (lastInputs.length === 1) {
         lastInputs.length -= 1;
