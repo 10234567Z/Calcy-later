@@ -32,8 +32,13 @@ for (i = 0; i < numbers.length; i++) {
             else if (e.target.id === '.' && firstInputs.includes('.')) {
                 return null
             }
-            else if(firstInputs[0] === '0' && e.target.id === '0'){
+            else if (firstInputs[0] === '0' && e.target.id === '0' && firstInputs[1] !== '.') {
                 return null;
+            }
+            else if (firstInputs[0] === '0' && e.target.id !== '0' && e.target.id !== '.' && firstInputs[1] !== '.') {
+                firstInputs.push(e.target.id);
+                firstInputs.shift()
+                typedText.innerHTML = `${firstInputs.join('')}`;
             }
             else {
                 firstInputs.push(e.target.id);
@@ -51,8 +56,13 @@ for (i = 0; i < numbers.length; i++) {
             else if (e.target.id === '.' && lastInputs.includes('.')) {
                 return null;
             }
-            else if(lastInputs[0] === '0' && e.target.id === '0'){
+            else if (lastInputs[0] === '0' && e.target.id === '0' && lastInputs[1] !== '.') {
                 return null;
+            }
+            else if (lastInputs[0] === '0' && e.target.id !== '0' && e.target.id !== '.' && lastInputs[1] !== '.') {
+                lastInputs.push(e.target.id);
+                lastInputs.shift()
+                typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
             }
             else {
                 lastInputs.push(e.target.id);
@@ -84,11 +94,11 @@ document.querySelector('.negate').addEventListener('mousedown', () => {
         typedText.innerHTML = `${firstInputs.join('')} ${operator} (${lastInputs.join('')}`;
         calculate();
     }
-    else if(firstInputs.includes('-') && operatorClicked === false){
+    else if (firstInputs.includes('-') && operatorClicked === false) {
         firstInputs.shift();
         typedText.innerHTML = `${firstInputs.join('')}`;
     }
-    else if(lastInputs.includes('-') && operatorClicked === true){
+    else if (lastInputs.includes('-') && operatorClicked === true) {
         lastInputs.shift();
         typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
         calculate();
@@ -104,10 +114,10 @@ for (i = 0; i < operators.length; i++) {
     operators[i].addEventListener('mousedown', (e) => {
         if (firstInputs.length >= 1 && firstInputs.join('') !== '0.' && firstInputs.join('') !== '-0.') {
 
-            if(value.toFixed(2).length > 10){
+            if (value.toFixed(2).length > 10) {
                 calculator.style.gridTemplateRows = '30% 5% 13% 13% 13% 13% 13%';
             }
-            else{
+            else {
                 calculator.style.gridTemplateRows = '20% 5% 15% 15% 15% 15% 15%';
             }
             e.target.style.fontSize = '0.8em'
@@ -146,10 +156,10 @@ for (i = 0; i < buttons.length; i++) {
  */
 document.addEventListener('keydown', (e) => {
     Keyboard(e);
-    calculate();
     resultText.innerHTML = '';
     valueChanged = false;
-    if (firstInputs.length > 0 && valueChanged === false) {
+    if (firstInputs.length > 0 && valueChanged === false && operatorClicked === false) {
+        calculate();
         if (e.key === '*') {
             operator = 'x';
             typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
@@ -170,31 +180,22 @@ document.addEventListener('keydown', (e) => {
             typedText.innerHTML = `${firstInputs.join('')} ${operator} `;
             operatorClicked = true;
         }
-        else if (e.key === '%') {
-            percentage();
-        }
-        else if (e.key === 'c' || e.key === 'C' || e.key === 'Escape') {
-            Reset();
-        }
-        else if(e.key === 'Enter' || e.key === '='){
-            calculate();
-            Equals();
-        }
-        if(value.toFixed(2).length > 10 && isFinite(value)){
+        if (value.toFixed(2).length > 10 && isFinite(value)) {
             calculator.style.gridTemplateRows = '30% 5% 13% 13% 13% 13% 13%';
         }
-        else{
+        else {
             calculator.style.gridTemplateRows = '20% 5% 15% 15% 15% 15% 15%';
         }
     }
-    else if (valueChanged === true && operatorClicked === false) {
-        lastInputs.length = 0;
-        firstInputs.length = 0;
-        firstInputs = Array.from(value.toFixed(2));
-        typedText.innerHTML = `${firstInputs.join('')}`;
-        resultText.innerHTML = '';
-        valueChanged = false;
-        Keyboard(e);
+    if (e.key === 'Enter' || e.key === '=') {
+        calculate();
+        Equals();
+    }
+    if (e.key === 'c' || e.key === 'C' || e.key === 'Escape') {
+        Reset();
+    }
+    if (e.key === '%') {
+        percentage();
     }
 })
 
@@ -302,8 +303,13 @@ function Keyboard(e) {
             else if (e.key === '.' && firstInputs.includes('.')) {
                 return null;
             }
-            else if(firstInputs[0] === '0' && e.key === '0'){
+            else if (firstInputs[0] === '0' && e.key === '0' && firstInputs[1] !== '.') {
                 return null;
+            }
+            else if (firstInputs[0] === '0' && e.key !== '0' && e.key !== '.' && firstInputs[1] !== '.') {
+                firstInputs.push(e.key);
+                firstInputs.shift()
+                typedText.innerHTML = `${firstInputs.join('')}`;
             }
             else {
                 firstInputs.push(e.key);
@@ -319,11 +325,16 @@ function Keyboard(e) {
                 lastInputs.push(e.key);
                 typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
             }
-            else if(lastInputs[0] === '0' && e.key === '0'){
-                return null;
-            }
             else if (e.key === '.' && lastInputs.includes('.')) {
                 return null;
+            }
+            else if (lastInputs[0] === '0' && e.key === '0' && lastInputs[1] !== '.') {
+                return null;
+            }
+            else if (lastInputs[0] === '0' && e.key !== '0' && e.key !== '.' && lastInputs[1] !== '.') {
+                lastInputs.push(e.key);
+                lastInputs.shift()
+                typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
             }
             else {
                 lastInputs.push(e.key);
@@ -400,11 +411,11 @@ function Backspace() {
 
 function Equals() {
     let lastNumber = parseFloat(lastInputs.join(''));
-    if(value === 'Infinity' || lastNumber === 0. && operator === '÷'){
+    if (value === 'Infinity' || lastNumber === 0. && operator === '÷') {
         alert('Cant divide with zero');
         Reset();
     }
-    else{
+    else {
         firstInputs.length = 0;
         lastInputs.length = 0;
         operator = '';
