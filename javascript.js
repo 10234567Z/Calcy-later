@@ -23,14 +23,14 @@ for (i = 0; i < numbers.length; i++) {
         e.target.style.fontSize = '0.9em'
 
         /** Build the number before operator while keeping max length and other necessary checks */
-        if (operatorClicked === false && firstInputs.length <= 7 && firstInputs[firstInputs.length - 1] !== '%') {
+        if (operatorClicked === false && firstInputs.length - 2 <= 8 && firstInputs[firstInputs.length - 1] !== '%') {
             if (e.target.id === '.' && firstInputs.length < 1) {
                 firstInputs[0] = 0;
                 firstInputs.push(e.target.id);
                 typedText.innerHTML = `${firstInputs.join('')}`;
             }
             else if (e.target.id === '.' && firstInputs.includes('.')) {
-                alert('Invalid Input')
+                return null
             }
             else {
                 firstInputs.push(e.target.id);
@@ -38,7 +38,7 @@ for (i = 0; i < numbers.length; i++) {
             }
         }
         /** Build the number after operator while keeping max length and other necessary checks */
-        else if (operatorClicked === true && lastInputs.length <= 7 && lastInputs[lastInputs.length - 1] !== '%') {
+        else if (operatorClicked === true && lastInputs.length - 2 <= 8 && lastInputs[lastInputs.length - 1] !== '%') {
             if (e.target.id === '.' && lastInputs.length < 1) {
                 lastInputs[0] = 0;
                 lastInputs.push(e.target.id);
@@ -46,7 +46,7 @@ for (i = 0; i < numbers.length; i++) {
 
             }
             else if (e.target.id === '.' && lastInputs.includes('.')) {
-                alert('Invalid Input')
+                return null;
             }
             else {
                 lastInputs.push(e.target.id);
@@ -56,8 +56,8 @@ for (i = 0; i < numbers.length; i++) {
         }
         /** If none of the above criteria meets , its invalid for calculator */
         else {
-            alert('Invalid Input');
             e.target.style.fontSize = '2em'
+            return null;
         }
     })
 }
@@ -86,9 +86,6 @@ document.querySelector('.negate').addEventListener('mousedown', () => {
         lastInputs.shift();
         typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
         calculate();
-    }
-    else {
-        alert('Invalid Input');
     }
 })
 
@@ -287,7 +284,7 @@ function Keyboard(e) {
                 typedText.innerHTML = `${firstInputs.join('')}`;
             }
             else if (e.key === '.' && firstInputs.includes('.')) {
-                alert('Invalid Input')
+                return null;
             }
             else {
                 firstInputs.push(e.key);
@@ -305,16 +302,12 @@ function Keyboard(e) {
                 typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
             }
             else if (e.key === '.' && lastInputs.includes('.')) {
-                alert('Invalid Input')
+                return null;
             }
             else {
                 lastInputs.push(e.key);
                 typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
             }
-        }
-        /** If none of the above criteria meets , its invalid for calculator */
-        else {
-            alert('Invalid Input');
         }
     }
 }
@@ -327,7 +320,7 @@ function percentage() {
     if (operatorClicked === false && firstInputs.length > 0) {
 
         if (firstInputs.includes('%')) {
-            alert('Invalid Input')
+            return null;
         }
         else {
             firstInputs.push('%');
@@ -341,7 +334,7 @@ function percentage() {
     else if (operatorClicked === true && lastInputs.length > 0) {
 
         if (lastInputs.includes('%')) {
-            alert('Invalid Input')
+            return null;
         }
         else {
             lastInputs.push('%')
@@ -351,9 +344,6 @@ function percentage() {
             valueChanged = true;
             calculate();
         }
-    }
-    else {
-        alert('Invalid Input');
     }
 }
 
@@ -384,9 +374,6 @@ function Backspace() {
         resultText.innerHTML = '';
         value = 0;
         typedText.innerHTML = `${firstInputs.join('')}`;
-    }
-    else {
-        alert('Invalid Input');
     }
 }
 
