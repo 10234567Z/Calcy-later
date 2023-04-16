@@ -83,26 +83,7 @@ document.querySelector('.percentage').addEventListener('mousedown', () => {
 })
 
 document.querySelector('.negate').addEventListener('mousedown', () => {
-    /** Negate the first number if the number is typed before operator chosen and it exists */
-    if (operatorClicked === false && firstInputs.length > 0 && !(firstInputs.includes('-'))) {
-        firstInputs.unshift('-');
-        typedText.innerHTML = `${firstInputs.join('')}`;
-    }
-    /** Negate the last number if the number is typed after operator chosen and it exists */
-    else if (operatorClicked === true && lastInputs.length > 0 && !(lastInputs.includes('-'))) {
-        lastInputs.unshift('-');
-        typedText.innerHTML = `${firstInputs.join('')} ${operator} (${lastInputs.join('')}`;
-        calculate();
-    }
-    else if (firstInputs.includes('-') && operatorClicked === false) {
-        firstInputs.shift();
-        typedText.innerHTML = `${firstInputs.join('')}`;
-    }
-    else if (lastInputs.includes('-') && operatorClicked === true) {
-        lastInputs.shift();
-        typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
-        calculate();
-    }
+    Negation();
 })
 
 document.querySelector('.reset').addEventListener('mousedown', () => {
@@ -204,6 +185,9 @@ document.addEventListener('keydown', (e) => {
     }
     if(e.key === 'Backspace'){
         Backspace();
+    }
+    if(e.key === 'n' || e.key === 'N'){
+        Negation();
     }
 })
 
@@ -454,4 +438,27 @@ function Equals() {
         operatorClicked = false;
         valueChanged = false;
     }
+}
+
+function Negation(){
+        /** Negate the first number if the number is typed before operator chosen and it exists */
+        if (operatorClicked === false && firstInputs.length > 0 && !(firstInputs.includes('-'))) {
+            firstInputs.unshift('-');
+            typedText.innerHTML = `${firstInputs.join('')}`;
+        }
+        /** Negate the last number if the number is typed after operator chosen and it exists */
+        else if (operatorClicked === true && lastInputs.length > 0 && !(lastInputs.includes('-'))) {
+            lastInputs.unshift('-');
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} (${lastInputs.join('')}`;
+            calculate();
+        }
+        else if (firstInputs.includes('-') && operatorClicked === false) {
+            firstInputs.shift();
+            typedText.innerHTML = `${firstInputs.join('')}`;
+        }
+        else if (lastInputs.includes('-') && operatorClicked === true) {
+            lastInputs.shift();
+            typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
+            calculate();
+        }
 }
