@@ -114,7 +114,7 @@ for (i = 0; i < operators.length; i++) {
         if (valueChanged === true) {
             lastInputs.length = 0;
             firstInputs.length = 0;
-            firstInputs = Array.from(value.toFixed(2));
+            DecimalDisplay();
             typedText.innerHTML = `${firstInputs.join('')} ${operator}`
             resultText.innerHTML = '';
         }
@@ -132,10 +132,13 @@ for (i = 0; i < buttons.length; i++) {
     })
 }
 
-/** TLDR; If value changed is false normally take in keyboard inputs and calculate if its true , then reset calculator make the value changed false and
- * again make the calculator pick up the keyboard inputs.
- */
+
 document.addEventListener('keydown', (e) => {
+
+    /** There are no continuous calculations , just upon enter button click it would calculate , upon click the valuechanged would be false and then upon click of operator it would be
+     * turned true calculate as specified in calculate function and then whenever an equals key other than operator is clicked , it turns value changed again to false then straight go
+     * to equals function and wont be changing the valueChanged boolean resulting in the value being displayed.
+     */
     Keyboard(e);
     resultText.innerHTML = '';
     valueChanged = false;
@@ -262,6 +265,7 @@ function calculate() {
     }
 
 
+    /** Any of the Infinity/NaN/Undefined values being turned to no value being returned to user */
     if (value === Infinity || value === NaN || value === -Infinity || (firstNumber === 0 && lastNumber === 0)) {
         value = 'Infinity';
         resultText.innerHTML = '';
@@ -404,6 +408,7 @@ function Backspace() {
             calculate();
         }
     }
+    /** To prevent any NaN value , remove anything off result text */
     else if (lastInputs.length === 1) {
         lastInputs.length -= 1;
         typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
@@ -419,6 +424,7 @@ function Backspace() {
     }
 }
 
+/** A separate equal function for the presses of equal button or enter key leading the value in soft display be on typed text */
 function Equals() {
     let lastNumber = parseFloat(lastInputs.join(''));
     if (value === 'Infinity' || lastNumber === 0. && operator === '÷') {
@@ -432,9 +438,9 @@ function Equals() {
         firstInputs.length = 0;
         lastInputs.length = 0;
         operator = '';
-        typedText.innerHTML = value.toFixed(2);
         resultText.innerHTML = '';
-        firstInputs = Array.from(value.toFixed(2));
+        DecimalDisplay();
+        typedText.innerHTML = firstInputs.join('')
         operatorClicked = false;
         valueChanged = false;
     }
@@ -452,6 +458,7 @@ function Negation(){
             typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
             calculate();
         }
+        /** (Both cases following) To not repeat negative and can toggle the negation as per will */
         else if (firstInputs.includes('-') && operatorClicked === false) {
             firstInputs.shift();
             typedText.innerHTML = `${firstInputs.join('')}`;
@@ -461,4 +468,14 @@ function Negation(){
             typedText.innerHTML = `${firstInputs.join('')} ${operator} ${lastInputs.join('')}`;
             calculate();
         }
+}
+
+/** To check if the value have decimals or not */
+function DecimalDisplay() {
+    if((value - Math.floor(value) !== 0)){
+        firstInputs = Array.from(value.toFixed(2));
+    }
+    else {
+        firstInputs = Array.from(value.toString());
+    }
 }
