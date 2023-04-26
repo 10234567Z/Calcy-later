@@ -20,4 +20,6 @@ A *fancy calculator*
 
 ***Sneak Peak***
 
+![image](https://user-images.githubusercontent.com/93607971/234463068-4d1579f6-b972-4501-a8b2-079f25f36a02.png)
+
 You can visit this calculator and give it a try [here](https://10234567z.github.io/Calcy-later/)
